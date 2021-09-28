@@ -157,6 +157,50 @@
         console.log(Math.max(...numbers));  /// trả về 10
         console.log(Math.min(...numbers));  /// trả về 100
     ```
+### Lọc phần tử của mảng bằng filter
+    ```javascript
+        var numbers=[1,5,8,15,20,25,9,35];
+        const find=numbers.filter(number=>number>18);  /// hàm filter sẽ lọc các phần tử và in ra những phần tử lớn hơn 18.
+        console.log(find);  /// trả về array [20,25,35]
+    ```
+### Vòng lặp qua các phần tử của mảng : map,forEach
+    2 method này đều thực hiện chức năng giống vòng lặp for, đều thực hiện một chức năng cho một lần lặp phần tử mảng và đều không làm thay đổi mảng gốc. Tuy nhiên map sẽ không thực hiện chức năng cho mảng không có giá trị
+```javascript
+    var numbers=[1,2,3,4,5,6];
+    numbers.forEach(x=>console.log(x));  ///in ra từng giá trị của mảng 1  2  3  4  5  6
+    const numbers1= numbers.map(x=>x*2); ///tạo ra mảng mới có giá trị gấp 2 lần mảng cũ
+    console.log(numbers1);   /// trả về mảng  [2,4,6,8,10,12];
+```
+### Method kiểm tra nếu tất cả các phần tử đều vượt qua bài kiểm tra thì trả về true: every
+    ```javascript
+        const number1=[1,2,3,17,18,20,54,35];
+        const number2=[19,20,22,25,47];
+        let result1 = number1.every(x=>x>18);  /// kiểm tra tất cả các phần tử có lớn hơn 18 không????
+        let result2 = number2.every(x=>x>18);  /// kiểm tra tất cả các phần tử có lớn hơn 18 không????
+        console.log(result1); /// trả về false
+        console.log(result2); /// trả về true
+    ```
+### Method trả về true nếu có bất kì 1 phần tử nào vượt qua bài kiểm tra: some
+    ```javascript
+        const number1=[1,2,3,17,8,20,4,5];
+        const number2=[1,2,12,5,7];
+        let result1 = number1.some(x=>x>18);  /// kiểm tra tất cả các phần tử có lớn hơn 18 không????
+        let result2 = number2.some(x=>x>18);  /// kiểm tra tất cả các phần tử có lớn hơn 18 không????
+        console.log(result1); /// trả về true vì có 20>18
+        console.log(result2); /// trả về false
+    ```
+### Method tìm kiếm indexOf,lastIndexOf,find,findIndex
+Method indexOf sẽ trả về số chỉ mục của phần từ đầu đầu tiên thỏa mãn điều kiện
+Method lastIndexOf sẽ trả về số chỉ mục của phần tử cuối cùng thỏa mãn điều kiện
+Method find sẽ trả về giá trị của phần tử đầu tiên thỏa mãn điều kiện
+Method findIndex sẽ trả về vị trí của phần tử đầu tiên thỏa mãn điều kiện
+```javascript
+    var numbers=[1,2,5,16,18,20,22,18,30];
+    console.log(numbers.indexOf(18));     /// tìm vị trí của số 18 đầu tiên trong mảng
+    console.log(numbers.lastIndexOf(18)); /// tìm vị trí của số 18 cuối cùng trong mảng
+    console.log(numbers.find(x=>x>18));   /// tìm giá trị số lớn hơn 18 đầu tiên trong mảng
+    console.log(numbers.findIndex(x=>x>18))  /// tìm vị trí số lớn hơn 18 đầu tiên trong mảng
+``` 
 ## So sánh các method trong Array
 ### Chuyển mảng thành chuỗi:toString và join
     Cả 2 method này đều thực hiện chức năng chuyển mảng thành chuỗi. Tuy nhiên nếu dùng toString thì nó sẽ tạo ra chuối mới với các phần tử trong mảng nối tiếp nhau ngăn cách bằng dầu ",". Còn nếu dùng join ta có thể lựa chon bất kì giá trị nào ngăn cách giữa các phần tử sau khi tạo thành chuỗi
@@ -219,6 +263,31 @@
         var foods= ['rice','chicken','pizza'];
         foods.splice(1,1);
         console.log(foods); /// xóa 1 phần tử từ số chỉ mục 1. Trả về ['rice','pizza']
+    ```
+### Vòng lặp qua các phần tử của mảng : map,forEach
+    2 method này đều thực hiện chức năng giống vòng lặp for, đều thực hiện một chức năng cho một lần lặp phần tử mảng và đều không làm thay đổi mảng gốc. Tuy nhiên map sẽ không thực hiện chức năng cho mảng không có giá trị
+```javascript
+    var numbers=[1,2,3,4,5,6];
+    numbers.forEach(x=>console.log(x));  ///in ra từng giá trị của mảng 1  2  3  4  5  6
+    const numbers1= numbers.map(x=>x*2); ///tạo ra mảng mới có giá trị gấp 2 lần mảng cũ
+    console.log(numbers1);   /// trả về mảng  [2,4,6,8,10,12];
+```
+### Method tìm kiếm indexOf,lastIndexOf,find
+Method indexOf sẽ trả về số chỉ mục của phần từ đầu đầu tiên thỏa mãn điều kiện
+Method lastIndexOf sẽ trả về số chỉ mục của phần tử cuối cùng thỏa mãn điều kiện
+Method find sẽ trả về giá trị của phần tử đầu tiên thỏa mãn điều kiện
+Method findIndex sẽ trả về vị trí của phần tử đầu tiên thỏa mãn điều kiện
+```javascript
+    var numbers=[1,2,5,16,18,20,22,18,30];
+    console.log(numbers.indexOf(18));     /// tìm vị trí của số 18 đầu tiên trong mảng
+    console.log(numbers.lastIndexOf(18)); /// tìm vị trí của số 18 cuối cùng trong mảng
+    console.log(numbers.find(x=>x>18));   /// tìm giá trị số lớn hơn 18 đầu tiên trong mảng
+    console.log(numbers.findIndex(x=>x>18))  /// tìm vị trí số lớn hơn 18 đầu tiên trong mảng
+```
+### Method trả về mảng đối tượng Iterator của từng phần tử mảng
+    ```javascript
+        var numbers=[3,7,4,6,8];
+        console.log(numbers.keys());
     ```
 ## Copy array và những cách hay sử dụng? Ưu nhược điểm và performance mỗi cách
 ### Cách không cần duyệt từng phần tử mảng
