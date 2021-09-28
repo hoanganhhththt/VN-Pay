@@ -23,6 +23,31 @@
     asyncFunction(printEnd);               
     /// Màn hình sẽ in lần lượt Start, Waiting, End do Start vs Waiting được gọi đồng thời theo thứ tự trên xuống mà k cần đợi Start vs setTimeout chạy xong.
 ```
+#### Callback hell
+    Khi quá nhiều câu lệnh bất đồng bộ, ta cần phải lồng từng callback đấy vào nhau, khiến cho code vô cùng khó đọc và debug, gọi là Callback Hell
+```javascript
+    function getData(link, callback) {
+        setTimeout(() => {
+        callback();
+        }, 1000)
+    }
+
+    getData("Data1", () => {
+    getData("Data2", () => {
+        getData("Data2", () => {
+            getData("Data3", () => {
+                getData("Data4", () => {
+                    getData("Data5", () => {
+                        getData("Data6", () => {
+                        console.log("Done");                     
+                    })
+                })
+            })
+         })
+      })
+   })
+})
+```
 ### Promise
     Có thể hiểu là lời hứa cho một giá trị chưa tồn tại và giá trị đó sẽ được trả về vào một thời gian trong tương lai
     Ví dụ bạn mua một món hàng mất 2 ngày mới về. Chủ shop đã thực hiện với bạn 1 lời hứa 2 ngày sau hàng sẽ về. Sau đó bạn vẫn ăn,ngủ, hoạt đồng bình thường và sau 2 ngày thì bạn sẽ nhận hàng
