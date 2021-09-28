@@ -284,11 +284,6 @@ Method findIndex sẽ trả về vị trí của phần tử đầu tiên thỏa
     console.log(numbers.find(x=>x>18));   /// tìm giá trị số lớn hơn 18 đầu tiên trong mảng
     console.log(numbers.findIndex(x=>x>18))  /// tìm vị trí số lớn hơn 18 đầu tiên trong mảng
 ```
-### Method trả về mảng đối tượng Iterator của từng phần tử mảng
-    ```javascript
-        var numbers=[3,7,4,6,8];
-        console.log(numbers.keys());
-    ```
 ## Copy array và những cách hay sử dụng? Ưu nhược điểm và performance mỗi cách
 ### Cách không cần duyệt từng phần tử mảng
 #### Sử dụng method slice
@@ -407,3 +402,116 @@ Method findIndex sẽ trả về vị trí của phần tử đầu tiên thỏa
     Ưu điểm:  Mảng cũ không bị thay đổi. Code ngắn
     Nhược điểm: DÙng nhiều hàm, mất thời gian và phải lặp qua từng phần tử. Loại bỏ phần tử bị trùng sẽ vừa là ưu điểm vừa là nhược điểm của nó tùy vào nhu cầu người code
     Performance: Sẽ k tốt bằng các cách không cần duyệt phần tử như slice,concat,spread operator
+## Deep copy và shallow copy
+### Khái niệm
+    Deep copy: toàn bộ giá trị được gán vào biến sẽ được sao chéo và tách rời hoàn toàn với bản gốc
+    Shallow copy: Một số giá trị vẫn kết nối với bản gốc
+### Trường hợp
+    1, Các biến nguyên thủy: Number, String, Boolean, undefined, null 
+        Bạn không cần phải lo lắng về việc copy các biến này vì nó sẽ cho ra biến mới tách biệt hoàn toàn với biến cũ
+    2, Kiểu dữ liệu hỗn hợp (Obj và Array)
+        - Về bản chất array cũng là 1 object.
+        - Khi thực hiên copy obj và array vào 1 biến mới, điều đó sẽ chỉ tham chiều đến giá trị ban đầu.
+    Shallow copy:        
+```javascript
+    /// array
+    var arr=[1,2,4];
+    var arr1=arr;        /// gán arr1 sẽ bằng arr
+    arr1[1]=3;           
+    console.log(arr);   /// trả về [1,3,4]. Khi ta thay đổi arr1[1], nó sẽ thay đôi đến giá trị tham chiều của nó
+    /// obj
+    const a = {
+        en: 'Hello',
+        vi: 'Xin chào'
+    }
+
+    let b = a
+    b.vi = 'Chao xìn'
+    console.log(b.vi) // Chao xìn
+    console.log(a.vi) // Chao xìn
+```
+### Cách để copy Obj và Array tránh bị shallow copy(deep copy)
+#### Object
+##### Speard operator
+    Deep copy 1 Obj
+```javascript
+    const a = {
+        en: 'Hello',
+        vi: 'Xin chào'
+    }
+
+    let b = {...a}
+    b.vi = 'Chào'
+    console.log(b.vi) // Chào
+    console.log(a.vi) // Xin chào
+```
+##### Object.assign
+    Cũng tương tự speard operator nhưng được sử dụng trước khi speard operator được sinh ra
+```javascript
+    const a = {
+        en: 'Hello',
+        vi: 'Xin chào'
+    }
+
+    let b = Object.assign({}, a)   ///copy a vào {}
+    b.vi = 'Chào'
+    console.log(b.vi) // Chào
+    console.log(a.vi) // Xin chào
+```
+##### Cẩn thận khi có obj lồng nhau
+```javascript
+    const a = {
+        languages: {
+            vi: 'Xin chào'
+        }
+    }
+    let b = {...a}
+    b.languages.vi = 'Chao xìn'
+    console.log(b.languages.vi) // Chao xìn
+    console.log(a.languages.vi) // Chao xìn
+```
+Khi này language của b sẽ tham chiều đến của a. Khi đó ta cần sử dụng JSON.stringify,JSON parse
+##### JSON.stringift, JSON.parse
+    ```javascript
+        const a = {
+            languages: {
+                vi: 'Xin chào'
+            }
+        }
+        let b = JSON.parse(JSON.stringify(a))
+        b.languages.vi = 'Chào'
+        console.log(b.languages.vi) // Chào
+        console.log(a.languages.vi) // Xin chào
+    ```
+#### Array
+##### Speard operator
+    ```javascript
+        const a = [1,2,3]
+        let b = [...a]
+        b[1] = 4
+        console.log(b[1]) // 4
+        console.log(a[1]) // 2
+    ```
+##### Dùng các hàm duyệt phần tử: map, filter, reduce
+    ```javascript
+        var a=[1,4,5,6];
+        var b= a.map(x=>x);
+        console.log(b); // trả về [1,4,5,6]
+    ```
+##### Dùng array.slice
+    ```javascript
+        var a=[1,4,5,6];
+        var b=a.slice(0);    //hoặc b=a.slice()
+        console.log(b);      // trả về [1,4,5,6];
+    ```
+##### Dùng JSON.parse(JSON.stringify)
+    ```javascript
+        var a=[1,2,4,5];
+        var b=JSON.parse(JSON.stringify(a));
+        console.log(b);      // trả về [1,2,4,5]
+    ```
+### Tổng kết
+    Khi copy Obj hoặc Array ta cần lưu ý tránh để bị Shallow Copy. Nên sử dụng các phương pháp Deep Copy
+    Trong đó:
+        -Obj: thì nên sử dụng  Speard operator, Obj,assign, JSON.stringify và JSON.parse
+        -Arr: thì nên sử dụng  Speard operator, Arr.slice, JSON.stringify và JSON.parse. Dùng các hàm vòng lặp map,filter,reduce cũng được tuy nhiên hiệu năng sẽ nặng hơn vì nó phải lặp qua từng phần tử của mảng,nhưng bù lại nó có thể thay đổi giá trị phần tử ta không mong muốn khi copy
