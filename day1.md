@@ -511,7 +511,7 @@ Khi này language của b sẽ tham chiều đến của a. Khi đó ta cần s�
         console.log(b);      // trả về [1,2,4,5]
     ```
 ### Tổng kết
-    Khi copy Obj hoặc Array ta cần lưu ý tránh để bị Shallow Copy. Nên sử dụng các phương pháp Deep Copy
+    Khi copy Obj hoặc Array ta cần lưu ý tùy trường hợp sử dụng mà dùng shallow copy hay deep copy. Nếu muốn copy mà cái mới tạo ra không liên quan đến mảng cũ thì ta nên dùng deep copy còn trường hợp muốn sử dụng copy nhưng mảng mới vẫn tham chiều đến mảng cũ thì nên dùng shallow copy. Ta nên hiểu , phân biệt ra 2 trường hợp copy này tránh để bị lộn vào nhau dẫn đến kết quả không mong muốn.
     Trong đó:
         -Obj: thì nên sử dụng  Speard operator, Obj,assign, JSON.stringify và JSON.parse
         -Arr: thì nên sử dụng  Speard operator, Arr.slice, JSON.stringify và JSON.parse. Dùng các hàm vòng lặp map,filter,reduce cũng được tuy nhiên hiệu năng sẽ nặng hơn vì nó phải lặp qua từng phần tử của mảng,nhưng bù lại nó có thể thay đổi giá trị phần tử ta không mong muốn khi copy
