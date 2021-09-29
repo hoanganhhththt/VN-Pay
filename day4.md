@@ -86,11 +86,11 @@
 ## Sự khác nhau giữa FP và OOP
                 Functional programming	                                                OOP
     Lấy function là đơn vị thao tác cơ bản	                         |  Thao tác dựa trên các concept của object
-    Sử dụng dữ liệu không thể thay đổi	                             |  Sử dụng dữ liệu thay đổi
-    Các hàm gọi hàm và đệ quy	                                     |  Thực hiện trên các vòng lặp và câu lệnh điều kiện
-    Hỗ trợ hoạt động song song	                                     |  Không hỗ trợ hoạt động song song
-    Function không chưa side effects	                             |  Method có chứa side effects
-    Sử dụng đệ quy để lặp lại dư liệu (list, array..)	             |  Sử dụng các vòng lặp (for, while, forEach…)
+    Sử dụng dữ liệu không thể thay đổi	                          |  Sử dụng dữ liệu thay đổi
+    Các hàm gọi hàm và đệ quy	                                  |  Thực hiện trên các vòng lặp và câu lệnh điều kiện
+    Hỗ trợ hoạt động song song	                                  |  Không hỗ trợ hoạt động song song
+    Function không chưa side effects	                          |  Method có chứa side effects
+    Sử dụng đệ quy để lặp lại dư liệu (list, array..)	          |  Sử dụng các vòng lặp (for, while, forEach…)
     Thứ tự thực hiện các câu lệnh không quan trọng	                 |  Thứ tự thực hiện các câu lệnh cực kì quan trọng
     Hổ trợ cả “Abstraction over Data” và “Abstraction over Behavior”.|	Chỉ hổ trợ “Abstraction over Data”.
 ## Các quy tắc và xu hướng của FP
@@ -103,4 +103,4 @@
     - Hạn chế tối đa việc thay đổi giá trị biến hay object. Tốt nhất là không nên thay đổi, mọi thứ trong FP nên là const
     - Tất cả các function đều phải là Pure function. Nghĩa là những function này không được thay đổi bất cứ thứ gì bên ngoài nó. Không được thay đổi tham số đầu vào. Không có hiệu ứng phụ (side effect)
 ### Xu hướng
-    
+
