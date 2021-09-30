@@ -60,13 +60,15 @@
     })
     promise.then()
     .catch()
+    .finally()
 ```
     Trong đó:
     - resolve: là một hàm callback xử lý cho hành động thành công
     - reject: là một hàm callback xử lý cho hành động thất bại
-    Promise cung cấp cho ta 2 phương thức để xử lí dữ liệu sau khi thực hiện :
+    Promise cung cấp cho ta 3 phương thức để xử lí dữ liệu sau khi thực hiện :
     - then(): dùng để xử lí sau khi Promise được thực hiện thành công (khi resolve được gọi)
     - catch(): dùng để xử lí sau khi Promise có bất kì một lỗi nào (khi reject được gọi)
+    - finally(): khi promise thực hiện thành công hay thất bại thì nó cũng gọi đến finally.Nó được gọi xong khi chạy xong then/catch.
 #### Ví dụ
 ```javascript
     var fs = require('fs');
@@ -87,6 +89,40 @@
         .catch(function(err){           /// bắt được lỗi bất kì thì in lỗi ra
             console.log(err);
         })
+```
+#### Trường hợp đặc biệt
+##### Nối nhiều promise
+```javascript
+    function getData(url){
+        // trả về 1 promise ở đây
+        // gửi 1 request lấy dữ liệu
+        // sau khi lấy về kết quả, xử lí promise với dữ liệu nhận được
+    }
+    var promise = getData('url');
+    promise.then(function(result){  // có dữ liệu từ 'url' tại đây
+        return getData(result); // trả về 1 promise khác
+    }).then(function(result){
+        //ở đây chưa kết quả promise vừa trả về ở trên và xử lí kết quả cuối cùng
+    })
+```
+    Nếu bạn trả về 1 Promise ở hàm then() thứ nhất, thì hàm then() thứ hai sẽ chờ và chỉ được gọi cho đến khi Promise ở hàm then() thứ nhất thực hiện xong xuôi.
+##### Promise có return và không return trong hàm then()
+    Khi promise có nhiều hàm then() thì giá trị return của then đứng trước có thể làm tham số cho giá trị của then đứng sau. Còn then đứng trước không return thì tham số của then đứng sau sẽ là undefined
+```javascript
+    function getData(url){
+        // trả về 1 promise ở đây
+        // gửi 1 request lấy dữ liệu
+        // sau khi lấy về kết quả, xử lí promise với dữ liệu nhận được
+    }
+    var promise = getData('url');
+    promise.then(function(){
+        console.log('nhan du lieu thanh cong');
+        return 1;                   /// ở đây return về giá trị 1
+    }).then(function(data){         /// tham số data ở đây sẽ nhận giá trị 1 từ return của then trước
+        console.log(data)           ///  in ra giá trị 1
+    }).then(function(data){         ///hàm then trước k return nên data ở đây sẽ là undefined
+        console.log(data);          /// in ra undefined 
+    }).catch((err)=>console.log(err));
 ```
 ### Async/Await
     Được xây dựng trên Promise và tương thích với tất cả Promise dựa trên API.
