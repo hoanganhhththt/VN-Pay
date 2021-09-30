@@ -52,8 +52,53 @@
     }
 ```
     Hàm này vi phạm một điều đó trong định nghĩa về pure function đó là nó bị phụ thuộc vào biến x bên ngoài nó, cho nên nó không thể coi là pure
-### Function composition
+### Function composition (phần này em hơi khó hiểu ạ,em chỉ hiểu đơn giản là kết hợp các hàm thôi)
     Đó là một tiến trình kết hợp hai hay nhiều hàm để tạo nên hàm mới hoặc thực hiện một nhiệm vụ gì đó.
+    Chúng ta có thể kết hợp 2 hàm bằng cách tổng quát như sau:
+```javascript
+    //ES5
+    function kethop(outFunc,inFunc){
+        return function(value){
+            return outFunc(inFunc(value));
+        }
+    }
+    //ES6
+    var kethop = (outFunc,inFunc)=>value=>outFunc(inFunc(value));
+```
+#### Nếu nhiều hơn 2 hàm
+```javascript
+    // Cách 1
+    function kethop(...funcs){
+        return function(value){
+            var soham=funcs.slice();/// sao chép mảng funcs gốc và lưu vào biến soham
+            while(soham.leng>0){
+                value= soham.pop()(value) /// chạy hàm từ phải sang trái nên ta phải dùng pop()
+            }
+        }
+    }
+    //Cách 2 : Nhược điểm là hàm kethop1 chỉ nhận duy nhất 1 đối sô. thức tế ta ở ngoài ta phải dùng nhiều đối số khác nhau.
+    function kethop(...funcs){
+        return function kethop1 (value){
+            return funcs.reverse().reduce(function(value,func){
+                return func(value);
+            },value);
+        };
+    }
+    // Cách 3: Dùng để giải quyết vấn đề của cách 2
+    function compose(...funcs) {
+        return funcs.reduceRight(function(func1, func2) {
+            return function composing(...args) {
+                return func2(func1(...args));
+            };
+        });
+    }
+
+    let fullName = (firstName, lastName) => firstName + " " + lastName;
+    let uppercase = text => text.toUpperCase();
+    let greeting = name => "Hello " + name;
+    let sayHello = compose(uppercase, greeting, fullName);
+    sayHello('Anh', 'Le'); /// HELLO ANH LE
+```
 ### Immutability - Bất biến
 #### Share state
     - Khái niệm: Là bất cứ các biến, đối tượng, hoặc không gian bộ nhớ mà chúng tồn tại trong một pham vi được chia sẻ(shared scope)
@@ -103,4 +148,7 @@
     - Hạn chế tối đa việc thay đổi giá trị biến hay object. Tốt nhất là không nên thay đổi, mọi thứ trong FP nên là const
     - Tất cả các function đều phải là Pure function. Nghĩa là những function này không được thay đổi bất cứ thứ gì bên ngoài nó. Không được thay đổi tham số đầu vào. Không có hiệu ứng phụ (side effect)
 ### Xu hướng
-
+    Trong lịch sử công nghệ, có vẻ OOP chiếm ưu thế hơn so với Functional Progamming. Nhưng kể từ năm 2010, có một số người bắt
+    đầu phàn nàn nhiều hơn về OOP và chủ đề FP nóng dần trở lại. Một số người còn đề cao FP như nấc thang tiến hóa trong lịch sử. Từ đó đến nay,FP từng bước lan rộng, ảnh hưởng đến thiết kế của rất nhiều trương trình hiện đại. Ví dụ như reactjs, cũng bắt đầu xu hướng FP, không dùng đến class,this,new nữa.
+    Nhưng bạn phải biết rằng, FP không bài xích OOP. Chúng là 2 trường phái lập trinh khác nhau. Trong khi viết code ta có thể kết
+    hợp nhiều cơ chế lập trình khác nhau, miễn sao kết quả nhanh-đẹp-gọn-đúng.
