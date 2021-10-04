@@ -152,3 +152,5 @@
     đầu phàn nàn nhiều hơn về OOP và chủ đề FP nóng dần trở lại. Một số người còn đề cao FP như nấc thang tiến hóa trong lịch sử. Từ đó đến nay,FP từng bước lan rộng, ảnh hưởng đến thiết kế của rất nhiều trương trình hiện đại. Ví dụ như reactjs, cũng bắt đầu xu hướng FP, không dùng đến class,this,new nữa.
     Nhưng bạn phải biết rằng, FP không bài xích OOP. Chúng là 2 trường phái lập trinh khác nhau. Trong khi viết code ta có thể kết
     hợp nhiều cơ chế lập trình khác nhau, miễn sao kết quả nhanh-đẹp-gọn-đúng.
+    *** Bổ sung: + for/while thay bằng (đệ quy hoặc map,filter...) 
+                 + if/else bằng (Toán tử Điều kiện) hoặc logical operators (&&, ||)
