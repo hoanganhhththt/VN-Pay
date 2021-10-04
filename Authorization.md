@@ -10,7 +10,7 @@
 #### Cách tạo một mã JWT
     JWT bao gồm 3 thành phần quan trọng: HEADER, PAYLOAD, SIGNATURE
 ##### HEADER
-    Đây là nơi chứa cái thông tin mà được dùng để trả lời cho câu hỏi "Mã JWT được tính toán như thế nào?"
+    Đây là nơi chứa cái thông tin cách biển đổi token"
     Ví dụ
 ```JSON
     {
@@ -48,7 +48,7 @@
 ```
 #### JWT bảo vệ dữ liệu người dùng bằng cách nào?
     JWT không bảo vệ dữ liệu của bạn.
-    Mục đích của nó được sử dụng là chứng mính răng dữ liệu được tạo ra bởi 1 nguồn xác thực. Dữ liệu chỉ được Encoded và Hash (Signed) chứ không phải Encrypted
+    JWT được biến đổi chứ vẫn có thể bị hack được. Vẫn có rất nhiều lần Facebook bị đánh cắp thông tin người dùng
 #### Server xác thực mã JWT gửi lên từ client ra sao?
     Trong ví dụ trên ta sử dụng một chuối bí mật "secret" trong bươc tạo signature. Chuỗi "secret" này phải được lưu trữ cẩn thận ở phía server.
     Khi nhận được mã gửi Token gửi lên từ phía client, server sẽ lấy phần signature bên trong token đó, kiểm tra xem cái signature đó có đúng chính xác được HASH bởi cùng 1 thuật toán và chuỗi "secret" không.
@@ -77,9 +77,10 @@
     - Nếu thông tin định danh được xác thực và giấy ủy quyền hợp lệ, Authorization Server sẽ trả về cho Application "access_token". Đến đây quá trình ủy quyên hoàn tất.
     - Để truy cập vào tài nguyên (resource) từ Resource Server và lấy thông tin, Application sẽ phải đưa ra "access_token" để xác thực.
     - Nếu "access_token" hợp lệ, Resource Server sẽ trả về dữ liệu của tài nguyên đã được yêu cầu từ Application.
+    VD khi bạn muốn đăng nhập instagram bằng tài khoản google. Thì đầu tiên instagram sẽ dẫn bạn đên trang web của Google và liệt kê một số quyền trang web đó muốn bạn cho phép. Khi này Google sẽ gửi một đoạn code cho bạn thông qua điện thoại hoặc qua mail. Và khi bạn nhập đúng mã code thì dựa vào id của bạn và code này nếu nhập đúng thì instagram sẽ trả về cho bạn một access token. Để sử dụng những chức năng của instagram thì khi bạn gửi resquest, nó sẽ đính kèm thêm access token này để xác thực. Nếu xác thực thành công thì instagram sẽ trả về các dữ liệu,giao diện bạn cần dùng
 ## Token, Refresh Token, Access token
 ### Token
-    - Token chính là một thông tin rất cần thiết hay còn gọi là công cụ để truy cập giao diện tài nguyên (API)
+    - Token giống như một chìa khóa để truy cập giao diện tài nguyên (API)
     - Token bao gồm những gì: uid (danh tính duy nhất của người dùng), thời gian (dấu thời gian của thời gian hiện tại), ký hiệu (chữ ký, một vài chữ số đầu tiên của token được nén thành một chuỗi thập lục phân có độ dài nhất định bằng thuật toán Hashing hay còn gọi là băm)
     - Mỗi yêu cầu cần mang token và token cần được đặt trong header HTTP
     - Xác thực người dùng dựa trên token là phương thức xác thực không trạng thái trên Server. Server không cần lưu trữ dữ liệu token. Do đó giảm áp lực cho Server và giảm query liên tục và thường xuyên dưới Database
@@ -96,28 +97,24 @@
 #### Lưu ý khi sử dụng token
     - Điện thoại di động không hỗ trợ cookie tốt và vì vậy Token thường được sử dụng trên những ứng dụng trên mobile.
     - Token được quản lý hoàn toàn bởi ứng dụng, vì vậy nó có thể bỏ qua chính sách CORS
-    - Nếu bạn nghĩ rằng việc sử dụng cơ sở dữ liệu để lưu trữ Token sẽ khiến truy vấn mất quá nhiều thời gian, bạn có thể chọn lưu trữ trong bộ nhớ. 
 ### Refresh token
 #### Định nghĩa
-    Refresh token thực chất nó cũng chính là một token. Nhưng nó khác với Token Auth của JWT về chức năng đó là Refresh Token chỉ có một nhiệm vụ duy nhất đó là đề lấy một token mới, nêú token được cấp phát cho user hết hạn. Refresh token được cấp cho User cùng với token khi user xác thực đầu tiên nhưng thời gian của chúng khác nhau. Với token thì có thể 1 giờ, nhưng Refresh Token là có khi là 10 ngày.
+    Refresh token thực chất nó cũng chính là một token. Được tạo ra cùng với access token nhưng thời gian hiệu lực lâu hơn, chức năng là đề lấy một token mới, nêú access token được cấp phát cho user hết hạn. Khi refresh token hết hạn thì ta cần đăng nhập lại để nó tạo ra refresh token mới nhưng thường thì refresh token sẽ có giá trị sử dụng rất lâu nên ít khi xảy ra trường hợp này. Và khi người dùng logout thì resfresh token cũng sẽ bị xóa đi.
 #### Hoạt động
     Theo mô hình JWT thì:
-    - Máy khách sử dụng username và password để xác thực.
-    - Máy chủ tạo token JWT với thời gian hiệu lực ngắn hơn (VD:10p) và Refresh token với thời gian hiệu lực dài hơn (VD: 7 ngày)
-    - Khi client truy cập vào giao diện cần yêu cầu xác thực, nó sẽ mang token theo
+    - Đầu tiên user sẽ đăng nhập vs username và password. Sau đó client sẽ gửi username và password lên server
+    - Server tạo token JWT với thời gian hiệu lực ngắn (VD:10p) để tránh bị hack token và Refresh token với thời gian hiệu lực dài hơn (VD: 7 ngày). 
+    - Khi client truy cập vào giao diện, gửi yêu cầu request, thì trong request cần mang token theo
     - Nếu token chưa hết hạn, server sẽ trả về dữ liệu và khách hàng cần sau khi xác thực
-    - Nếu xác thực thất bại khi truy cập vào giao diện yêu cầu xác thực bằng token (VD trả về lỗi 401), sử dụng refresh token để áp dụng cho token mới từ giao diện làm mới
-    - Nếu refresh token chưa hết hạn, máy chủ sẽ cấp token mới cho khách hàng
-    - Máy khách sử dụng token mới để truy cập vào giao diện yêu cầu xác thực
+    - Nếu xác thực thất bại hoặc token đã hết hạn (VD trả về lỗi 401), thì refresh token sẽ được gọi để tạo ra một token mới thay cho token đã hết hạn
+    - Máy khách sử dụng token mới để truy cập vào ứng dụng và sử dụng các chức năng của ứng dụng đó
+    - Khi người dùng logout thì refresh cũng bị xóa theo
 #### Refresh token được lưu ở đâu?
-    Khác với token JWT được lưu ở Cookies, Session, hay localStorage thì Refresh Token được lưu ở database ở phía server (với tôi nó là vậy). Vì sao lại như vậy, vì Refresh Token sẽ không sử dụng cho việc khi máy khách yêu cầu trên giao diện, và nó chỉ được sử dụng khi một token hết hạn. Nó không ảnh hưởng đến hiệu suất của database, hay liên quan đến việc phản hồi từng yêu cầu của Client, nên nó không cần thiết phải lưu như một token bình thường
+    Khác với token JWT được lưu ở Cookies, Session, hay localStorage thì Refresh Token được lưu ở database ở phía server. Vì Refresh Token sẽ không sử dụng cho việc khi user sử dụng các chức năng, và nó chỉ được sử dụng khi một token hết hạn. Và khi người dùng logout thì nó sẽ bị xóa theo luôn.
 ### Access token
-    Access token là đoạn mã sinh ra ngẫu nhiên được sử dụng bí mật cho mỗi người dùng, ứng dụng khi thực hiện các thao tác quan trọng hay truy cập vào tài khoản của người dùng. 
-    Trong trường hợp này, bạn có thể hiểu access token như một đường hầm bí mật để đi vào ngôi nhà của bạn. Các hình thức xác thực như username, password giống như khóa và chìa khóa cửa nhà của bạn. Access token sẽ không đi qua cánh cửa này. 
-    Khi ai đó kết nối với một ứng dụng bằng hình thức đăng nhập facebook, ứng dụng đó có thể lấy access token cung cấp quyền truy cập tạm thời, an toàn vào API facebook. 
-    Access token là chuỗi không rõ xác định người dùng, ứng dụng hoặc trang và ứng dụng có thể dùng mã đó để thực hiện lệnh gọi API và có thể lấy access token bằng nhiều phương thức khác nhau. 
+    Access token là đoạn mã để xác thực quyền truy cập, cho phép bên thứ 3 truy cập vào những dữ liệu của người dùng trong phạm vi nhất định người người dùng ủy quyền cho phép. Access token này sẽ được đính kèm mỗi khi client gửi yêu cầu request lên server để truy cập đến những tài nguyên trong Resource server. 
+    Access token thường sẽ có thời gian hiêu lực ngắn, vì hacker có thể dùng nhưng access token này để đánh cắp dữ liệu người dùng, nhưng nếu cứ một thời giàn ngắn phải đăng nhập lại thì quá bất tiện nên refresh token được sử dụng để tránh vấn đề này, nó sẽ tạo ra token mới cho người dùng sử dụng tiếp mà k cần phải nhập thông tin hay đăng nhập lại.
 ## Tổng kết về token
-    - Access token chỉ nên có giới hạn trong thời gian ngắn. Ví dụ như trong ngân hàng phiên làm việc rất ngắn hạn đảm bảo cho việc không bị tấn công qua token, token của client rất dễ bị lộ đa số storage như cookies...
-    - Việc xác thực một accest token chỉ làm việc tại Resource Server. Nhưng khi xác thực một Refresh Token thì nó lại làm việc trên Authorization Server. Vì Authorization Server không những bắt buộc có một Refresh Token mà còn gửi cả password và username lên nữa mới có thể sinh ra một token mới.
-    - Access token truy cập thường không được đặt quá lâu và refresh token là để kéo dài thời gian hiệu lực của mã thông báo truy cập. Việc tạo ra refresh token không phải để cho bạn thay thế điều như bạn nói, mà nó giúp hệ thống lấy lại được access token mới, mỗi khi nó hết hạn. Cũng như không cần phải lục lọi lại database để check thông tin khách hàng của bạn.
-    - Quay lại cách mà accesss token làm việc thì, chúng ta thấy đa số là hết hạn tầm khoảng hai tiếng từ khi chúng sinh ra. Sau khi hết hạn bạn không thể để người dùng cứ 2 tiếng lại phải login một lần chứ? Trừ khi bạn cần họ, như banking internet vậy. Vì bạn cần bank, còn những trang như facebook bạn thử cho họ cứ 2 giờ login lại xem. Đảm bảo out ngay khi lập nghiệp đúng không? Chính vì vậy, cứ hết hạn server và lập trình viên phải uyển chuyển như thế nào để người dùng đang sử dụng mà vẫn không biết chuyện gì đang xảy ra. Trường hợp này chúng ta nên tìm hiểu về AXIOS INTERCEPTORS
+    - Access token chỉ nên có giới hạn trong thời gian ngắn. 
+    - Việc xác thực một accest token chỉ làm việc tại Resource Server. Còn Refresh Token thì nó lại làm việc trên Authorization Server. Vì Authorization Server không những bắt buộc có một Refresh Token mà còn gửi cả password và username lên nữa mới có thể sinh ra một token mới.
+    - Tùy vào nhu cầu sử dụng mà ta sẽ dùng refresh token cho hợp lí, các app banking thì ko nhất thiết phải dung refresh token vì yêu cầu của nó cần người dùng đăng nhập lại thường xuyên tránh trường hợp bị đánh cắp tài sản. Còn với trường hợp đăng nhập bình thương như khi sử dụng facebook thì ta cần sử dụng đồng thời 2 token để tránh gây trải nghiệm xấu đến người dùng. 2 token này mỗi token 1 nhiệm vụ và nó hỗ trợ cho nhau trong quá trình sử dụng
