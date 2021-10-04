@@ -77,12 +77,13 @@
     - Nếu thông tin định danh được xác thực và giấy ủy quyền hợp lệ, Authorization Server sẽ trả về cho Application "access_token". Đến đây quá trình ủy quyên hoàn tất.
     - Để truy cập vào tài nguyên (resource) từ Resource Server và lấy thông tin, Application sẽ phải đưa ra "access_token" để xác thực.
     - Nếu "access_token" hợp lệ, Resource Server sẽ trả về dữ liệu của tài nguyên đã được yêu cầu từ Application.
-    VD khi bạn muốn đăng nhập instagram bằng tài khoản google. Thì đầu tiên instagram sẽ dẫn bạn đên trang web của Google và liệt kê một số quyền trang web đó muốn bạn cho phép. Khi này Google sẽ gửi một đoạn code cho bạn thông qua điện thoại hoặc qua mail. Và khi bạn nhập đúng mã code thì dựa vào id của bạn và code này nếu nhập đúng thì instagram sẽ trả về cho bạn một access token. Để sử dụng những chức năng của instagram thì khi bạn gửi resquest, nó sẽ đính kèm thêm access token này để xác thực. Nếu xác thực thành công thì instagram sẽ trả về các dữ liệu,giao diện bạn cần dùng
+    * VD khi bạn muốn đăng nhập instagram bằng tài khoản google. Thì đầu tiên instagram sẽ dẫn bạn đên trang web của Google và liệt kê một số quyền trang web đó muốn bạn cho phép. Khi này Google sẽ gửi một đoạn code cho bạn thông qua điện thoại hoặc qua mail. Và khi bạn nhập đúng mã code thì dựa vào id của bạn và code này nếu nhập đúng thì instagram sẽ trả về cho bạn một access token. Để sử dụng những chức năng của instagram thì khi bạn gửi resquest, nó sẽ đính kèm thêm access token này để xác thực. Nếu xác thực thành công thì instagram sẽ trả về các dữ liệu,giao diện bạn cần dùng
 ## Token, Refresh Token, Access token
 ### Token
-    - Token giống như một chìa khóa để truy cập giao diện tài nguyên (API)
+    - Token giống như một chìa khóa, chữ kí để truy cập giao diện tài nguyên (API)
+    - Mỗi token ngẫu nhiên, và chỉ được sử dụng 1 lần
     - Token bao gồm những gì: uid (danh tính duy nhất của người dùng), thời gian (dấu thời gian của thời gian hiện tại), ký hiệu (chữ ký, một vài chữ số đầu tiên của token được nén thành một chuỗi thập lục phân có độ dài nhất định bằng thuật toán Hashing hay còn gọi là băm)
-    - Mỗi yêu cầu cần mang token và token cần được đặt trong header HTTP
+    - Mỗi yêu cầu request từ client cần mang token và token cần được đặt trong header HTTP
     - Xác thực người dùng dựa trên token là phương thức xác thực không trạng thái trên Server. Server không cần lưu trữ dữ liệu token. Do đó giảm áp lực cho Server và giảm query liên tục và thường xuyên dưới Database
     - Token được quản lý hoàn toàn bởi ứng dụng, vì vậy nó có thể bỏ qua chính sách CORS
     - Thường thì khi client được return về token thì sẽ lưu ở hai chỗ phổ biến đó là Cookies và localStorage. Ngoài ra còn có sessionstorage và indexDB nhưng sessionstorage và indexDB thì ít được sử dụng
