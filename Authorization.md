@@ -53,6 +53,11 @@
     Trong ví dụ trên ta sử dụng một chuối bí mật "secret" trong bươc tạo signature. Chuỗi "secret" này phải được lưu trữ cẩn thận ở phía server.
     Khi nhận được mã gửi Token gửi lên từ phía client, server sẽ lấy phần signature bên trong token đó, kiểm tra xem cái signature đó có đúng chính xác được HASH bởi cùng 1 thuật toán và chuỗi "secret" không.
     Cuối cùng,nếu signature đó khớp với chữ kí được tạo ra từ máy chủ, thì cái JWT đó là hợp lệ, ngược lại thì không, bên BE sẽ tùy từng trường hợp mà response về client một cách hợp lí
+#### Tổng kết
+    - JWT là JSON Web Token
+    - Các thông tin trong chuối JWT được định dạng kiểu JSON
+    - Chuỗi token cần phải có 3 phần : Header, Payload, Signature
+    - Khi người dùng đã đăng nhập thành công thì những request tiếp theo từ client đều phải chứa thêm mã JWT, điều này cho phép người dùng truy cập được một số chức năng cấp phép
 ### Oauth2
 #### Oauth là gì???
     OAuth là một phương thức chứng thực giúp các ứng dụng có thể chia sẻ tài nguyên với nhau mà không cần chia sẻ thông tin username và password. Từ Auth ở đây mang 2 nghĩa:
