@@ -115,6 +115,13 @@
 ### Access token
     Access token là đoạn mã để xác thực quyền truy cập, cho phép bên thứ 3 truy cập vào những dữ liệu của người dùng trong phạm vi nhất định người người dùng ủy quyền cho phép. Access token này sẽ được đính kèm mỗi khi client gửi yêu cầu request lên server để truy cập đến những tài nguyên trong Resource server. 
     Access token thường sẽ có thời gian hiêu lực ngắn, vì hacker có thể dùng nhưng access token này để đánh cắp dữ liệu người dùng, nhưng nếu cứ một thời giàn ngắn phải đăng nhập lại thì quá bất tiện nên refresh token được sử dụng để tránh vấn đề này, nó sẽ tạo ra token mới cho người dùng sử dụng tiếp mà k cần phải nhập thông tin hay đăng nhập lại.
+## So sánh access token và refresh token
+    Access token gọi là token để truy cập còn refresh token là token để làm mới. 
+    2 token này có thời gian sử dụng khác nhau, access token thì thời gian hiệu lực ngắn còn refresh token có thời gian hiêu lực rất dài có thể là cả tháng. 
+    Refresh token có chức năng tạo mới token khi access token cũ bị hết hạn. 
+    Refresh token được lưu ở server còn access token được lưu ở client
+    Khi client gửi request thì phải đính kèm access token. Còn Refresh Token sẽ không sử dụng cho việc khi user sử dụng các chức năng
+    2 token này hỗ trợ cho trong trong quá trình sử dụng của người dùng nhưng chức năng thì không hề liên quan đến nhau
 ## Tổng kết về token
     - Access token chỉ nên có giới hạn trong thời gian ngắn. 
     - Việc xác thực một accest token chỉ làm việc tại Resource Server. Còn Refresh Token thì nó lại làm việc trên Authorization Server. Vì Authorization Server không những bắt buộc có một Refresh Token mà còn gửi cả password và username lên nữa mới có thể sinh ra một token mới.
