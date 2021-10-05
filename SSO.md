@@ -10,6 +10,7 @@
     - Giảm được số lần đăng nhập 
     - Tỉ lệ lộ thông tin người dùng ít hơn
     - Tránh trường hợp người dùng quên tài khoản và mật khẩu do quá nhiều tài khoản cần nhớ
+    - Trải nghiêm đăng nhập tốt hơn
 #### Nhược điểm
     - Phải thông qua bên thứ 3
 ## Cơ chế hoạt động
@@ -29,8 +30,19 @@
     - Tương tự như giải thích ở trên thì social login cũng là 1 dang của Single Sign-On, là sử dụng thông tin đăng nhập trên các trang web lơn Google,FaceBook,...
     - Khi này domain trung tâm chính là domain của mạng xã hội. Nhờ đó ta có thể tạo tài khoản ở các domain con thông qua tài khoản của domain mạng xã hội.
 ### Luồng chạy chương trình của hệ thông sử dụng SSO vs Oauth
+    B1: User vào domain1 để đăng nhập.
+    B2: Domain1 sẽ chuyển hướng sang domain trung tâm
+    B3: Người dùng đăng nhập và nhờ thông tin đăng nhập này, domain trung tâm sẽ kiểm tra và định danh người dùng
+    B4: Domain trung tâm sẽ lưu vào Store Cookie đông thời chuyển hướng về domain1 kèm với 1 token
+    B5: Domain 1 sẽ dùng token đó để xác thực định danh người dùng và lưu vào stores domain1 cookie
+    B6: Nếu uset đăng nhập vào domain2.
+    B7: Domain 2 sẽ chuyển hướng về domain trung tâm tương tự như domain 1. Nhưng khi này cookie đã có sẵn rồi nên doamin trung tâm sẽ trả về token và chuyển hướng về domain 2.
+    B8: Domain 2 sẽ dựa vào token để xác minh và lưu thông tin vào stores domain 2 cookie
+    => Tóm lại thì: 
     - domain con chuyển hương đến domain trung tâm cho việc xác minh. 
     - Người dùng đăng nhập của domain trung tâm. 
     - Domain trung tâm sẽ chuyển hướng về domain con đính kèm với một token được sinh ra ngẫu nhiên. 
     - Ở domain con, ta sẽ sử dụng token đó để call API tới domain trung tâm cùng vs ID và Secret Key tạo nên Access Token. 
     - Sau đó nhưng request từ client đều sẽ cần có thêm access token(như ở bài trước)
+    
+    
