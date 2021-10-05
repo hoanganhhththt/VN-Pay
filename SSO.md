@@ -19,7 +19,6 @@
     - Trao đổi thông tin người dùng (User attributes exchange): Các thông tin người dùng như tên, họ,... sẽ dễ bị trùng lặp. Các hệ thống con cần các thông tin này và phải lưu trữ chúng. Sẽ có một nơi tổng hợp lại các thông tin này và trao đổi với hệ thống con
     - Quản lí người dùng (User management): admin có thể quản lí hệ thống người dùng qua các hoạt động thêm sửa xóa
     => SSO là một phần của hệ thống nhận dạng liên kết, có liên hệ chặt chẽ với việc xác thực người dùng. Nó sẽ định danh người dùng rồi chia sẻ thông tin định danh đó vs các hệ thống con
-    Ví dụ: Tài khoản Google có thể truy cập được nhiều trang web khác như youTube,Gmail,... Khi bạn đăng nhập tài khoản lần đầu ở Google sẽ tự động chuyển đến trang chủ google để đăng nhập. Sau khi nhập xong username và password(xác thực), Google sẽ gửi về một số cookie xác thực và chuyển hướng về Gmail(Phân quyền). Sau đó nếu ta muốn đăng nhập vào YouTube, nó sẽ chuyển hướng ta về tài khoản Google, tài khoản này sẽ xác thực vs cookie xác thực ở trước đó và ta sẽ đăng nhập thành công bên YouTube.Bạn có nhận thấy sau khi đăng nhập thành công ở YouTube, tài khoản YouTube của bạn sẽ có 1 số thông tin của bạn không?(Google đã Chia sẻ thông tin người dùng cho youtube) Ở đây google đã cấp quyền truy câp cho các hệ thống con là youtube,gmail,...
 ### Cơ chế hoạt động
     - Chức năng của nó giống như store trong redux để cho các component lấy được các dữ liệu. Thì ở đây SSO sẽ tạo ra một domain trung tâm.
     - Domain trung tâm này sẽ lưu và chia sẻ các thông tin cookie cho các domain của những trang web lại với nhau
@@ -29,3 +28,9 @@
 ### Social login
     - Tương tự như giải thích ở trên thì social login cũng là 1 dang của Single Sign-On, là sử dụng thông tin đăng nhập trên các trang web lơn Google,FaceBook,...
     - Khi này domain trung tâm chính là domain của mạng xã hội. Nhờ đó ta có thể tạo tài khoản ở các domain con thông qua tài khoản của domain mạng xã hội.
+### Luồng chạy chương trình của hệ thông sử dụng SSO vs Oauth
+    - domain con chuyển hương đến domain trung tâm cho việc xác minh. 
+    - Người dùng đăng nhập của domain trung tâm. 
+    - Domain trung tâm sẽ chuyển hướng về domain con đính kèm với một token được sinh ra ngẫu nhiên. 
+    - Ở domain con, ta sẽ sử dụng token đó để call API tới domain trung tâm cùng vs ID và Secret Key tạo nên Access Token. 
+    - Sau đó nhưng request từ client đều sẽ cần có thêm access token(như ở bài trước)
