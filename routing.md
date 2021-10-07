@@ -55,7 +55,7 @@
     - exact: Giúp cho route này chỉ hoạt động nếu URL trên trình duyệt phù hợp tuyệt đối với giá trị của thuộc tính path của nó.
     - component: là component sẽ được render ứng vs Route đó
 ## Link
-    Có nhiều loại link: Link, NavLink
+    DÙng để chuyển trang
 ### Link
 ```javascript
     <Link to="/items">Trang Item</Link> 
