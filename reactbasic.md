@@ -354,7 +354,266 @@ ReactDOM.render(
     );
 ```
 ### Conditional Rendering
-    
+    Ta sử dụng JSX để render trong React. JSX cho phép chúng ta sử dụng Pure JavaScript với các câu lệnh điều kiện quen thuộc
+#### If else
+```javascript
+    function CheckUsers(users){
+        if(users.length == 0){
+            return <h2>No one</h2>
+        }else{
+            return (
+                <div>
+                    {users.map(user => <ListUsers key={user.id} user={user} />)}
+                </div>
+            );
+        }
+    }
+```
+#### Ternary Operation
+    Cách dùng: condition ? trueExpression : falseExpression 
+```javascript
+    function TodoItem({item,isEditing}){
+        return(
+            <div>
+                {isEditing
+                    ?<TodoEdit item={item} />
+                    :<TodoItem item={item} />
+                }
+            </div>
+        )
+    }
+```
+#### logical && operator
+    Cách dùng: expression01 && expression02
+    Được sử dụng khi muốn render component hoặc return null
+    Nếu expression1 là true thì trả về expression2,nếu expression là false thì trả về null
+```javascript
+    // VD1:
+    const result = true && 'Hello World';  
+    console.log(result);
+    // Hello World
+
+    const result = false && 'Hello World';
+    console.log(result);
+    // false
+```
+#### Switch Case operator
+```javascript
+    const comment = ({text,state})=>{
+        switch(state){
+            case 'success':
+                return <Success text={text} />;
+            case 'error':
+                return <Error text={text} />;
+            case 'info':
+                return <Info text={text} />;
+            default:
+                return null;
+        }
+    }
+```
+### Lists and Keys
+    Thường sử dụng cho cho một mảng có chưa dữ liệu từ BackEnd gửi lên. Khi đó ta sẽ sử dụng map() để duyệt từng phần tử của mảng.
+    Còn Keys sử dụng giúp kiểm soát từng dữ liệu trong mảng, thường thì id sẽ được sử dụng làm keys.
+```javascript
+    const liseItem = this.props.items.map((item,key)=>{
+        return (
+            <ul key={key}>
+                {item.id}
+                <li>{item.name}</li>
+                <li>{item.age}</li>
+            </ul>
+        )
+    })
+```
+### Forms
+    Là biểu mẫu cho phép người dùng tương tác với trang web.
+#### The textarea Tag
+    Trong JSX, textarea khác HTML ở chỗ giá trị của nó được đặt trong một thuộc tính giá trị.
+```javascript
+    // Ví dụ
+    <textarea value={this.state.text}></textarea>
+    // Áp dụng
+    import { useState } from "react";
+    import ReactDOM from "react-dom";
+
+    function MyForm() {
+        const [textarea, setTextarea] = useState(
+            "The content of a textarea goes in the value attribute"
+        );
+
+    const handleChange = (event) => {
+        setTextarea(event.target.value)
+    }
+
+    return (
+        <form>
+            <textarea value={textarea} onChange={handleChange} />
+        </form>
+        )
+    }
+
+    ReactDOM.render(<MyForm />, document.getElementById('root'));
+```
+#### The select Tag
+    Trong React, giá trị đã chọn được xác định bằng value thuộc tính trên select thẻ
+```javascript
+    function MyForm() {
+        const [myCar, setMyCar] = useState("Volvo"); // khởi đầu sẽ là giá Volvo.
+
+        const handleChange = (event) => {
+            setMyCar(event.target.value)
+        }
+
+        return (
+            <form>
+                <select value={myCar} onChange={handleChange}>
+                    <option value="Ford">Ford</option>
+                    <option value="Volvo">Volvo</option>
+                    <option value="Fiat">Fiat</option>
+                </select>
+            </form>
+        )
+    }
+```
+#### The file input tag
+    Ta có thể tải lên một hoặc nhiều tệp từ bộ nhớ 
+```javascript
+    <input type='file' />
+```
+### Lifting State Up
+    Hiểu đơn gian thì đây là kĩ thuật truyền các giá trị, dữ liệu từ component cha sang component con.
+    Bằng cách truyền qua props của component con và thuộc tính của component cha.
+```javascript
+    import {Component} from React.Component
+    const VNDtoUSD = function (props){
+        const result = function(vnd){
+            return vnd/23632;
+        };
+        return (
+            <div>
+                <span>VND</span>
+                <input
+                    onChange={(e)=>{
+                        const vnd = e.target.value;
+                        const usd = result(vnd);
+                        props.onHandleChange({
+                            vnd,
+                            usd,
+                        });
+                    }}
+                    value = {props.value} 
+                />
+            </div>
+        );
+    };
+    const USDtoVND = function (props){
+        const result = function(usd){
+            return usd*23632;
+        };
+        return (
+            <div>
+                <span>USD</span>
+                <input
+                    onChange={(e)=>{
+                        const usd = e.target.value;
+                        const vnd = result(vnd);
+                        props.onHandleChange({
+                            usd,
+                            vnd,
+                        });
+                    }}
+                    value = {props.value} 
+                />
+            </div>
+        );
+    };
+    export default class App extends Component{
+        constructor(props){
+            super(props);
+            this.state={
+                usd:0,
+                vnd:0
+            }
+        };
+        handleChange = (data)=>{
+            this.setState(data);
+        }
+        render(){
+            return(
+                <div>
+                    <USDtoVND onHandleChange={this.handleChange} value={this.state.usd} />
+                    <VNDtoUSD onHandleChange={this.handleChange} value={this.state.vnd} />
+                </div>
+            )
+        }
+    }
+```
+    Khi mình nhập giá trị váo một trong 2 ô input VND hoặc USD thì nó sẽ trả về số tiền tương ứng ở ô input còn lại.
+    2 conponent con USDtoVND và VNDtoUSD đều gửi dữ liệu lên component App thông quá {props.value}.
+    Từ value đó component App sẽ lưu vào state của App rồi gửi về component còn lại thông qua value = {this.state.usd hoặc vnd}
+### Composition vs Inheritance
+    Trong react, từ 1 giao diện trang web ta có thể chia nhỏ ra thành rất nhiều component kết hợp lại với nhau
+    Việc chia nhỏ này sẽ giúp bạn dễ quản lí component hơn và hiệu năng nhanh hơn thay vì phải reload lại trang thường xuyên như khi sử dụng HTML
+    Các Component có thể nhận vào bất kì Props nào bao gồm giá trị cơ bản, React Element hay có thể là cả function. Ngoải ra nếu bạn muốn sử dụng function giữa các component bạn có thể chỉ cần dùng export và import mà k cần phải extend
+    Và component không sử dụng tính kế thừa
+```javascript
+    // đây là cách Component có thể nhận vào bất kì kiểu dữ liệu gì thông qua props 
+    function SplitPane(props) {
+        return (
+            <div className="SplitPane">
+                <div className="SplitPane-left">
+                    {props.left}
+                </div>
+                <div className="SplitPane-right">
+                    {props.right}
+                </div>
+            </div>
+        );
+    }
+
+    function App() {
+        return (
+            <SplitPane
+                left={
+                    <Contacts />
+                }
+                right={
+                    <Chat />
+            } />
+        );
+    }
+    // đây là ví dụ về cách thay đổi data dựa vào input đầu vào
+    function Dialog(props) {
+        return (
+            <FancyBorder color="blue">
+                    <h1 className="Dialog-title">
+                    {props.title}           
+                    </h1>
+                    <p className="Dialog-message">
+                    {props.message}
+                </p>
+            </FancyBorder>
+        );
+    }
+    // props.title sẽ nhận giá trị "Welcome"
+    // props.message sẽ nhận giá trị "Thank you for visiting our spacecraft!"
+    function WelcomeDialog() {
+        return (
+            <Dialog
+                title="Welcome"  
+                message="Thank you for visiting our spacecraft!" 
+            />
+        );
+    }
+```
+### Thingking in React
+#### Chia UI thành Component theo bậc
+#### Tối ưu code ở mức tối thiểu nhưng phải đầy đủ
+#### Sử dụng hợp lí state props
+
+
+
 
 
 
